@@ -1,40 +1,55 @@
 '''
   Carlos Cabada
   CS 2302 - Fall 2018
-  Lab Assignment No.1 : Lab1.py
-  Date: September 18, 2018
+  Lab Assignment No.2 : Lab_2.py
+  Date: October 22, 2018
   Instructor: Diego Aguirre
-  Purpose: Given a text file containing user, salt values and hashed passwords, generate the equivalent password to each user.
+  Purpose: Given a text file with 10 million usernames and passwords use linked list to order the passwords on the
+  times they appear on the file. Using Merge sort and Bubble sort we get the top 20 passwords
+
 
 '''
 
-
+from LinkedList import LinkedList
 from Node import Node
 
 
 def main():
     dict = {}
+    username = []
+    password = []
     filename = "10-million-combos.txt"
-
+    link_list = LinkedList
     with open(filename, mode="r") as file:
         for file in filename:
             username = file.split("\t")
             password = username[1] # Error :(
+            link_list.insert(password, 0) # inserts passwords into Linked list
 
-            if not solution_B(dict, password):
-                dict[password] = 1
-            if not solution_A(link_list, password):
-                link_list = Node(password, 1, link_list)
-        print(password)
+        solution_B(dict, password)
+        dict[password] = 1
+        # solution_A(link_list, password)
+        # link_list = Node(password, 1, link_list)
+
     print("Bubble sort: ")
     bubbleSort(link_list)
     print_list(link_list)
 
+    print("Top 20 are: ")
+
+    top_20(link_list)
 
     print("Merge sort: ")
     mergeSort(link_list)
     print_list(link_list)
+    print("Top 20 are: ")
 
+    top_20(list)
+
+
+#Displays top 20 most popular words in the list.
+def top_20(list):
+    pass
 
 #Increments count of each password as they appear on the list
 def solution_A(node, password):
