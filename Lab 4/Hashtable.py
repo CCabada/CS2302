@@ -20,16 +20,15 @@ class hashNode:
 class HashTable:
 
     def __init__(self, table_size):
-        self.table = []
         self.table = [None]*table_size
 
     def hash(self, k):  # hashes words, using each letter to the power of 26.
-        index = 0  # then it adds all of them together. returning the index.
-        temp = ord('a')
-        for i in range(len(k)):
+        h = 0  # then it adds all of them together. returning the index.
+        temp = ord("a") # lower case letters in the ascii start
+        for i in range(len(k)):# at 97, so a == 1, b == 2, c == 3, and so on.
             base = ord(k[i]) - temp
-            index += base * pow(26, (len(k) - 1) - i)
-        return index % len(self.table)
+            h = (h ** 26 + base) % len(self.table)
+        return h
 
     def hash1(self, k):
         pos =  k % len(self.table)
@@ -38,16 +37,15 @@ class HashTable:
     def insert(self, k, embedding):
 
         pos = self.hash(k)
-        list = self.table[pos]
-        node = hashNode(k, embedding, list)
-        list.append(node)
+        self.table[pos] = hashNode(k, embedding, self.table[pos])
 
-    def search(self, k):
-        pos = self.hash(k)
+    def search(self, word):
+        pos = self.hash(word)
+
         for i in self.table:
             t = self.table[pos]
             while t != None:
-                if t.item == k:
+                if t.word == word:
                     return t
 
         return None
