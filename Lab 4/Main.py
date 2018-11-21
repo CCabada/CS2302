@@ -20,7 +20,7 @@ def create_hash(filename,hash):
             if items[0].isalpha():
                 word = line.split(" ")[0]
                 embedding = items[1:51]
-                print(word, embedding)
+                # print(word, embedding)
                 hash.insert(word, embedding)
 
     return hash
@@ -29,8 +29,12 @@ def create_hash(filename,hash):
 def count_nodes(table):
     counter = 0
     for item in table.table:
-        counter += len(item)
-    return str(counter)
+        if item is not None:
+            counter += 1
+            if item.next is not None:
+                counter += 1
+
+    return (counter)
 
 
 # computes the load factor of the hash table.
@@ -45,22 +49,11 @@ def compare(filename, table):
             print(line.split()[0] + " " + line.split()[1] + " " + str(similarity(table, line.split()[0], line.split()[1])))
 
 
-# converts each word into a integer. It uses the ascii value of letters.
-# Then adds each value, returns the integer that would represent the word.
-def word_to_int(word):
-    output = []
-    number = 0
-    for character in word:
-        number += ord(character) - 96 # lower case letters in the ascii start
-    output.append(number)             # at 97, so a == 1, b == 2, c == 3, and so on.
-    print(output)
-
-
 # computes the similarity of words using the cosine distance formula.
 def similarity(table, word1, word2):
 
-    wo1 = table.search(word_to_int(word1))
-    wo2 = table.search(word_to_int(word2))
+    wo1 = table.search((word1))
+    wo2 = table.search((word2))
     top = 0
     bottom_a = 0
     bottom_b = 0
@@ -92,28 +85,27 @@ def string_to_float(holding_array):
 def avg_num_comparisons(table):
     total = 0
     occupied = 0
-    for i in range(len(table.table)):
-        temp = table.table[i]
+    for temp in table.table:
         if temp is not None:
             occupied += 1
+            if temp.next is not None:
+                total += 1
+                temp = temp.next
 
-        for temp in table.table[i]:
-            total += 1
-            temp = temp.next
-
-    return total / occupied
+    return str(total / occupied)
 
 
 def main():
     file = "smaller_file.txt"
     # file = "glove.6B.50d.txt"
-    table = HashTable(1000)
+    table = HashTable(100)
     create_hash(file, table)
 
-    # compare("similarities.txt", table)
+    compare("similarities.txt", table)
 
     print("Average number of Comparisons: " + avg_num_comparisons(table))
     print("Table's Load Factor: " + load_factor(table))
+    count_nodes(table)
 
 
 main()
