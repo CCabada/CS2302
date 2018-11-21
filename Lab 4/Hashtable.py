@@ -20,9 +20,8 @@ class hashNode:
 class HashTable:
 
     def __init__(self, table_size):
-        self.table = [None]
-        for i in range(table_size):
-            self.table.append([])
+        self.table = []
+        self.table = [None]*table_size
 
     def hash(self, k):  # hashes words, using each letter to the power of 26.
         index = 0  # then it adds all of them together. returning the index.
@@ -32,7 +31,12 @@ class HashTable:
             index += base * pow(26, (len(k) - 1) - i)
         return index % len(self.table)
 
+    def hash1(self, k):
+        pos =  k % len(self.table)
+        self.table[pos] = k
+
     def insert(self, k, embedding):
+
         pos = self.hash(k)
         list = self.table[pos]
         node = hashNode(k, embedding, list)
@@ -47,17 +51,3 @@ class HashTable:
                     return t
 
         return None
-
-    def number_comparisons(self):
-        total_elem = 0
-        num_occupied = 0
-        for i in range(len(self.table)):
-            temp = self.table[i]
-            if temp is not None:
-                num_occupied += 1
-
-            for temp in self.table[i]:
-                total_elem += 1
-                temp = temp.next
-
-        return total_elem / num_occupied
