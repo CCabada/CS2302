@@ -25,24 +25,6 @@ def create_hash(filename,hash):
 
     return hash
 
-
-# counts the nodes in the longest list.
-def longest_list(table):
-    countMax = 0
-    for i in table.table:
-        if len(i) > countMax:
-            countMax = len(i)
-    return str(countMax)
-
-
-# prints the nodes at a user specified index.
-def print_keys_at_index(x, k):
-    pos = k%len(x.table)
-    while x[pos] != None:
-        print(x.item + " ")
-        x = x.next
-
-
 # counts the node in the hash table.
 def count_nodes(table):
     counter = 0
@@ -107,17 +89,31 @@ def string_to_float(holding_array):
     return converted
 
 
+def avg_num_comparisons(table):
+    total = 0
+    occupied = 0
+    for i in range(len(table.table)):
+        temp = table.table[i]
+        if temp is not None:
+            occupied += 1
+
+        for temp in table.table[i]:
+            total += 1
+            temp = temp.next
+
+    return total / occupied
+
+
 def main():
     file = "smaller_file.txt"
     # file = "glove.6B.50d.txt"
-    table = HashTable(1049)
+    table = HashTable(1000)
     create_hash(file, table)
 
-    compare("similarities.txt", table)
-    print ("Number of Nodes: " + count_nodes(table))
-    print("Longest list: " + longest_list(table))
-    print("Avg Comparisons: " + table.num_comparisons(table))
-    print("Load Factor: " + load_factor(table))
+    # compare("similarities.txt", table)
+
+    print("Average number of Comparisons: " + avg_num_comparisons(table))
+    print("Table's Load Factor: " + load_factor(table))
 
 
 main()
